@@ -11,6 +11,7 @@ class Image_to_Numpy(object):
         self.output_path = output_path
 
     def image_rename(self):
+        # 修改图片名称 便于后续训练和取标签
         type_counter = 0
         for type in self.dog_types:
             instance_counter = 0
@@ -22,14 +23,17 @@ class Image_to_Numpy(object):
             type_counter += 1
 
     def image_resize(self, width=100, height=100):
+        # 卷积输入尺寸必须固定，这里取（100,100）
         for type in self.dog_types:
             for dog_instance in os.listdir(self.file_path + type):
                 img = Image.open(self.file_path + type + '/' + dog_instance)
+                # 因为无法确保数据集里的数据全是RGB格式，以防有单通道灰度图，initialize
                 img_RGB = img.convert('RGB')
                 resized_image = img_RGB.resize((width, height), Image.BILINEAR)
                 resized_image.save(os.path.join(self.output_path, dog_instance))
 
     def imgs_to_np(self):
+        # 网络输入需转为numpy数组，但后续数据集的创建运用了torch里的方法，实际返回参数是tensor类型和long tensor类型
         list_images = []
         list_labels = []
         for dog_instance in os.listdir(self.output_path):
