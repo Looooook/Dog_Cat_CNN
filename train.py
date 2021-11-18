@@ -75,7 +75,10 @@ def train_one_epoch(epoch):
         optimizer.step()
         total_loss += loss.item()
         if batch_idx % 20 == 19:
+            # 打印的batch size + 1 是为了显示batch size大小
             print('EPOCH:{},BATCH_IDX:{},LOSS:{}'.format(epoch + 1, batch_idx + 1, total_loss / 20))
+            # 在每次loop total_loss都初始为0
+            total_loss = 0
             # num_counter += 1
 
 
@@ -108,7 +111,7 @@ if __name__ == '__main__':
     # np_images_train = transform(np_images_train)
     train_data = TensorDataset(np_images_train, np_labels_train)
 
-    transforms.Normalize(mean=0.01, std=0.01)
+    # transforms.Normalize(mean=0.01, std=0.01)
     # print(train_data)
 
     train_loader = DataLoader(train_data, batch_size=20, shuffle=True)
